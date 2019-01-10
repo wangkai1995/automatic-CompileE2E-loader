@@ -11,11 +11,11 @@ var lastSignReg = /(?:(?:(?:[a-zA-Z_][\w\-\.]*\:)?[a-zA-Z_][\w\-\.]*)\/?>)?([\r\
 
 
 var templateParse = function(template,options){
-	var template = JSON.parse(template)
-	var firstSign = false;
-	var lastSign = false
 	//修正
 	options = options || {};
+	var template = options.e2eParse?JSON.parse(template):template
+	var firstSign = false;
+	var lastSign = false
 	//去除标签开头符号
 	if(fristSignReg.test(template)){
 		var codes = template.match(fristSignReg)
@@ -33,7 +33,7 @@ var templateParse = function(template,options){
 		}
 	}
 	//tenmplate
-	var AST = options.e2eParse?e2eParse(template,options):parse(template,options);
+	var AST = options.e2eParse?e2eParse(template,options):htmlParse(template,options);
 	//done
 	return AST
 }

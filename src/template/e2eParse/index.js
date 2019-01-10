@@ -25,16 +25,12 @@ var parse = function(template){
 				type: 1,
 				tagName:tag,
 				attrs:[],
-				className:false,
 				children: [],
 			}
 			//编译处理提取到的attribute
 			parseAttrs(element,attrs)
 			//如果根节点不存在
 			if(!rootEl){
-				if(element.isFor){
-					return warnError('compiler error: rootElement  can`t  is vm-for directive')
-				}
 				rootEl = element;
 			}
 			//父节点存在将自己加入父节点中
@@ -66,6 +62,7 @@ var parse = function(template){
 		chars: function(text){
 			var expression;
 			var text = text.trim();
+			text = text.replace(/\'/g,'\"')
 			if( text !== ' ' && (expression = parseText(text)) ){
 				currentParent.children.push({
 					type:2,

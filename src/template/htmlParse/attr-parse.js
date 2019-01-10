@@ -26,12 +26,12 @@ function getAttributeMap(attrMap,attrKey){
 
 
 
-//处理className
-function processClassName(elm,key,attrMap){
+//处理E2eRef引用
+function processE2eRef(elm,key,attrMap){
     if(key !== 'class'){
         return false
     }
-    elm.className = getAttributeMap(attrMap,key)
+    elm.e2eRef = getAttributeMap(attrMap,key)
 }
 
 
@@ -56,7 +56,7 @@ module.exports =  function parseAttrs(astElm ,attrs){
     for(var i=0; i<attrs.length; i++){
         var key = attrs[i].name;
         //处理className
-        processClassName(elm,key,attrsMap)
+        processE2eRef(elm,key,attrsMap)
     }
     processSurplus(elm,attrsMap)
 }

@@ -26,14 +26,6 @@ function getAttributeMap(attrMap,attrKey){
 
 
 
-//处理className
-function processClassName(elm,key,attrMap){
-    if(key !== 'class'){
-        return false
-    }
-    elm.className = getAttributeMap(attrMap,key)
-}
-
 
 //处理剩余attr
 function processSurplus(elm,attrMap){
@@ -55,8 +47,6 @@ module.exports =  function parseAttrs(astElm ,attrs){
     var elm = astElm;
     for(var i=0; i<attrs.length; i++){
         var key = attrs[i].name;
-        //处理className
-        processClassName(elm,key,attrsMap)
     }
     processSurplus(elm,attrsMap)
 }

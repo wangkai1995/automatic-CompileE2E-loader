@@ -25,6 +25,7 @@ var parse = function(template){
 				type: 1,
 				tagName:tag,
 				attrs:[],
+				e2eRef:false,
 				className:false,
 				children: [],
 			}
@@ -32,15 +33,15 @@ var parse = function(template){
 			parseAttrs(element,attrs)
 			//如果根节点不存在
 			if(!rootEl){
-				if(element.isFor){
-					return warnError('compiler error: rootElement  can`t  is vm-for directive')
-				}
 				rootEl = element;
+				//根组件特殊添加,方便快速找到元素
+				rootEl.rootRefMap = {}
 			}
 			//父节点存在将自己加入父节点中
 			if(currentParent){
 				currentParent.children.push(element);
-				element.parent = currentParent;
+				// 为了编译JSON 这里取消防止循环解析BUG
+				// element.parent = currentParent;
 			}
 			//不是自闭合组件
 			if(!unary){
@@ -66,6 +67,7 @@ var parse = function(template){
 		chars: function(text){
 			var expression;
 			var text = text.trim();
+			text = text.replace(/\'/g,'\"')
 			currentParent.children.push({
 				type:3,
 				exp:null,
