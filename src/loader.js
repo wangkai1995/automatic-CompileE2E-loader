@@ -27,14 +27,16 @@ module.exports = function(content) {
 	var AST = templateParse(content,{
 		e2eParse:true
 	})
-	console.log(AST)
+	// console.log(AST)
 	//生成E2E 实例对象
 	var insalce = new E2E(AST,Object.assign({
 		root:true
 	},options))
 
+	console.log(insalce)
 
 
+	debugger;
 	return outResult
 };
 

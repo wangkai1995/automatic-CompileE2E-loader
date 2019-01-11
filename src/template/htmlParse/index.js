@@ -2,7 +2,7 @@
 var { isNonPhrasingTag ,canBeleftOpenTag ,isUnaryTag }= require('../../util/index.js');
 var parseHTML  = require('./html-parse');
 var parseAttrs  = require('./attr-parse');
-
+var processRef = require('./process-ref')
 
 
 
@@ -25,23 +25,30 @@ var parse = function(template){
 				type: 1,
 				tagName:tag,
 				attrs:[],
-				e2eRef:false,
-				className:false,
 				children: [],
+				//e2e attr
+				e2eRef:false,  	//e2e实例
+				e2eScopeFlag:false, 	 //是否容器
+				e2eDirective:false,			 //是否包含tab
+				e2eRefChild:[],
 			}
 			//编译处理提取到的attribute
 			parseAttrs(element,attrs)
 			//如果根节点不存在
 			if(!rootEl){
 				rootEl = element;
+				rootEl.root = true;
 				//根组件特殊添加,方便快速找到元素
-				rootEl.rootRefMap = {}
+				rootEl.refMap = {}
+			}
+			//添加跟组件引用
+			if(element.e2eRef && element.e2eScopeFlag && !rootEl.refMap[element.e2eRef]){
+				rootEl.refMap[element.e2eRef] =  element
 			}
 			//父节点存在将自己加入父节点中
 			if(currentParent){
 				currentParent.children.push(element);
-				// 为了编译JSON 这里取消防止循环解析BUG
-				// element.parent = currentParent;
+				element.parent = currentParent;
 			}
 			//不是自闭合组件
 			if(!unary){
@@ -60,6 +67,10 @@ var parse = function(template){
 				if(lastNode && lastNode.type === 3 && lastNode.text === ''){
 					el.children.pop();
 				}
+			}
+			//如果存在ref 并且是容器, 那么处理一下自己子节点,处理子节点ref引用关系
+			if(el.e2eRef && el.e2eScopeFlag){
+				processRef(el)
 			}
 			currentParent = stack[stack.length -1];
 		},

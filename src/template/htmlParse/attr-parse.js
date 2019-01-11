@@ -26,13 +26,28 @@ function getAttributeMap(attrMap,attrKey){
 
 
 
-//处理E2eRef引用
+
+
+//处理e2eRef引用
 function processE2eRef(elm,key,attrMap){
-    if(key !== 'class'){
+    var refReg = /^e2e-(?:[refChild|ref]){1}(?:.*)?$/i
+    var refScopeReg = /^e2e-ref(?:-.*)?$/i
+    var refDirectiveReg = /^e2e-(?:[refChild|ref]+){1}-(.+)+$/i
+    if(!refReg.test(key)){
         return false
     }
     elm.e2eRef = getAttributeMap(attrMap,key)
+    if(refScopeReg.test(key)){
+        elm.e2eScopeFlag = true;
+    }
+    if(refDirectiveReg.test(key)){
+        elm.e2eDirective = key.match(refDirectiveReg)[1]
+    }
 }
+
+
+
+
 
 
 //处理剩余attr

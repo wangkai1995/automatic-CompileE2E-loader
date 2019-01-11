@@ -9,17 +9,19 @@ var { isEmptyArray,wranError } = require('../../util/tool.js')
 
 
 
-var generate = function(importPath,options){
+var generateElementAST = function(importPath,options){
 	var {
 		resourcePath
 	} = options
+	if(!importPath){
+		return false;
+	}
 	var mikdr = path.dirname(resourcePath)
 	var filePath = path.resolve(mikdr,importPath)
 	var resource = fs.readFileSync(filePath,'utf-8')
 
-	debugger;
 	var elAST = templateParse(resource)
-	console.log( elAST)
+
 	return  elAST;
 }
 
@@ -28,7 +30,7 @@ var generate = function(importPath,options){
 
 
 
-module.exports = generate
+module.exports = generateElementAST 
 
 
 
