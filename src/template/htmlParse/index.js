@@ -26,6 +26,7 @@ var parse = function(template){
 				tagName:tag,
 				attrs:[],
 				children: [],
+				id:false,
 				//e2e attr
 				e2eRef:false,  	//e2e实例
 				e2eScopeFlag:false, 	 //是否容器

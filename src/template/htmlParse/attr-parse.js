@@ -28,6 +28,16 @@ function getAttributeMap(attrMap,attrKey){
 
 
 
+//处理id
+function processId(elm,key,attrMap){
+    if(key !== 'id'){
+        return false
+    }
+    elm.id = getAttributeMap(attrMap,key)
+}
+
+
+
 //处理e2eRef引用
 function processE2eRef(elm,key,attrMap){
     var refReg = /^e2e-(?:[refChild|ref]){1}(?:.*)?$/i
@@ -70,7 +80,9 @@ module.exports =  function parseAttrs(astElm ,attrs){
     var elm = astElm;
     for(var i=0; i<attrs.length; i++){
         var key = attrs[i].name;
-        //处理className
+        //处理id
+        processId()
+        //处理E2E编译相关内容
         processE2eRef(elm,key,attrsMap)
     }
     processSurplus(elm,attrsMap)
