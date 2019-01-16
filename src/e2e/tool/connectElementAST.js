@@ -2,7 +2,7 @@
 
 
 var path = require('path');
-var { isEmptyObject,wranError } = require('../../../util/tool.js')
+var { isEmptyObject,wranError } = require('../../util/tool.js')
 
 
 

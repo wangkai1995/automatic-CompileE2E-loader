@@ -29,6 +29,10 @@ var parse = function(template){
 			}
 			//编译处理提取到的attribute
 			parseAttrs(element,attrs)
+			//修改节点类型
+			if(element.tagName === 'testmodule'){
+				element.type = 2;
+			}
 			//如果根节点不存在
 			if(!rootEl){
 				rootEl = element;
@@ -65,9 +69,15 @@ var parse = function(template){
 			text = text.replace(/\'/g,'\"')
 			if( text !== ' ' && (expression = parseText(text)) ){
 				currentParent.children.push({
-					type:2,
+					type:3,
 					exp:expression,
 					text: null
+				})
+			}else{
+				currentParent.children.push({
+					type:3,
+					exp:null,
+					text: text
 				})
 			}
 		}

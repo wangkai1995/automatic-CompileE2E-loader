@@ -3,8 +3,8 @@
 
 var fs = require('fs');
 var path = require('path');
-var templateParse = require('../../../template/index.js')
-var { isEmptyArray,wranError } = require('../../../util/tool.js')
+var templateParse = require('../../template/index.js')
+var { isEmptyArray,wranError } = require('../../util/tool.js')
 
 
 

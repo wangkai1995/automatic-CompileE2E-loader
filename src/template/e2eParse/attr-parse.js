@@ -20,7 +20,7 @@ function getAttributeMap(attrMap,attrKey){
     if(keys.indexOf(attrKey) !== -1){
         var attrValue = attrMap[attrKey];
         delete attrMap[attrKey];
-        return attrValue;
+        return attrValue.replace(/[\r\n\s\t]/g,'');
     }
 }
 

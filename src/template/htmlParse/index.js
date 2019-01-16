@@ -1,5 +1,6 @@
 
 var { isNonPhrasingTag ,canBeleftOpenTag ,isUnaryTag }= require('../../util/index.js');
+var { getUniqueID } = require('../../util/tool.js')
 var parseHTML  = require('./html-parse');
 var parseAttrs  = require('./attr-parse');
 var processRef = require('./process-ref')
@@ -23,10 +24,12 @@ var parse = function(template){
 			//组件
 			var element = {
 				type: 1,
+				nodeId: getUniqueID(),
 				tagName:tag,
 				attrs:[],
 				children: [],
 				id:false,
+				className:false,
 				//e2e attr
 				e2eRef:false,  	//e2e实例
 				e2eScopeFlag:false, 	 //是否容器
@@ -43,8 +46,8 @@ var parse = function(template){
 				rootEl.refMap = {}
 			}
 			//添加跟组件引用
-			if(element.e2eRef && element.e2eScopeFlag && !rootEl.refMap[element.e2eRef]){
-				rootEl.refMap[element.e2eRef] =  element
+			if(element.e2eRef && !rootEl.refMap[element.e2eRef]){
+				rootEl.refMap[element.e2eRef] =  {$el:element,path:false}
 			}
 			//父节点存在将自己加入父节点中
 			if(currentParent){

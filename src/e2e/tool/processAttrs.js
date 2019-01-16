@@ -28,10 +28,10 @@ function getAttributeMap(attrMap,attrKey){
 
 
 //处理剩余attr
-function processSurplus(elm,attrMap){
+function processSurplus(attrs,attrMap){
     for(var key in attrMap){
         var attr = {};
-        elm.attrs[key] = getAttributeMap(attrMap,key);
+        attrs[key] = getAttributeMap(attrMap,key);
     }
 }
 
@@ -40,13 +40,12 @@ function processSurplus(elm,attrMap){
 
 
 //编译节点属性
-module.exports = function processAttrs(astElm ,attrs){
+module.exports = function processAttrs(aseAttrs ,attrs){
     var attrsMap = setAttributeMap(attrs)
-    var elm = astElm;
     for(var i=0; i<attrs.length; i++){
         var key = attrs[i].name;
     }
-    processSurplus(elm,attrsMap)
+    processSurplus(aseAttrs,attrsMap)
 }
 
 

@@ -27,7 +27,7 @@ var parseText = function(text){
     while( (expMatch = expReg.exec(text)) ){
         //如果表达式之前有内容
         if(expMatch.index > lastIndex){
-            tokenExp.push('"'+text.slice(0,expMatch.index)+'"')
+            tokenExp.push('"'+text.slice(0,expMatch.index)+'"${')
             text = text.substring(expMatch.index);
         }
         //中间表达式内容
@@ -37,7 +37,7 @@ var parseText = function(text){
         //判断中间是否还有字符
         nextIndex = text.indexOf('{{');
         if(nextIndex > 0){
-            tokenExp.push('"'+text.slice(0,nextIndex)+'"')
+            tokenExp.push('}"'+text.slice(0,nextIndex)+'"${')
             text = text.substring(nextIndex);
         }
         //表达式之后还有字符
@@ -51,10 +51,10 @@ var parseText = function(text){
         }
     }
     if(lastIndex<text.length){
-        tokenExp.push('"'+text.slice(lastIndex,text.length)+'"')
+        tokenExp.push('}'+text.slice(lastIndex,text.length)+'"')
     }
 
-    return tokenExp.join('+');
+    return tokenExp.join('').replace(/[\s\r\t\n\b]/g,'');
 }
 
 

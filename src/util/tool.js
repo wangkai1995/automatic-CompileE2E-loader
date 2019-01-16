@@ -83,6 +83,16 @@ function toString(content) {
 
 
 
+/*获取唯一ID*/
+function getUniqueID() {
+    var id = 'xxxxtxxxx'.replace(/[xt]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            t = new Date().getTime(),
+            v = c == 'x' ? r : (c == 't' ? t :(r & 0x3 | 0x8));
+        return c == 't'? v: v.toString(16);
+    });
+    return id
+}
 
 /*
     深度合并内容
@@ -172,7 +182,8 @@ module.exports = {
     //
     toArray,
     toString,
-    extend
+    extend,
+    getUniqueID
 }
 
 
