@@ -1,12 +1,15 @@
 
 
 var TestPrototype = require('../prototype/index.js')
-var TestComponent = require('../component/index.js')
-var TestContent = require('../content/index.js')
-
 
 var processAttrs = require('../tool/processAttrs.js')
-var generateElementAST = require('../tool/generateElementAST.js')
+
+
+
+var createServer = require('./create.js')
+var patchServer = require('./patch.js')
+var renderServer = require('./render.js')
+
 
 
 class TestModule extends TestPrototype  {
@@ -30,6 +33,10 @@ class TestModule extends TestPrototype  {
         if(ast.tagName !== "testmodule"){
             wranError('generate testmodule instalce fail: ast tagName !== "testmodule" ')
         }
+        //mixin
+        this.$mixin(createServer)
+        this.$mixin(patchServer)
+        this.$mixin(renderServer)
         //params
         this.options = options
         this.props = props || false;
@@ -42,73 +49,18 @@ class TestModule extends TestPrototype  {
         this.attrs = {}
         this.ref = extend({},this.props.ref)
         processAttrs(this.attrs,ast.attrs)
-        //generate html AST
-        this.patchElementASTAndRef()
-        //create child
-        this.createChildren()
+        //init
+        this.init()
         // console.log(this)
         // debugger;
     }
 
 
-    //patch 
-    patchElementASTAndRef(){
-        if(!this.attrs['importTemplate'] && this.attrs['refName']){
-            return false;
-        }
-        var { resourcePath } = this.options
-        var { wranError,extend } = this.$tool
-        // parent function
-        var { patchElementAndRef } = this.props
-        //get import html template parse AST
-        var importPath = this.attrs['importTemplate']
-        var el = generateElementAST(importPath,{
-           resourcePath:resourcePath
-        })
-        var newRef = patchElementAndRef(el,this.attrs['refName'])
-        if(!newRef ){
-            return false;
-        }
-        this.ref = extend({},newRef)
-    }
-
-
-    //createChildren
-    createChildren(){
-        var self = this;
-        var { isEmptyArray,isExist,wranError } = self.$tool
-        var astChildren = self.$ast.children
-        if(isEmptyArray(astChildren)){
-            return false;
-        }
-        astChildren.forEach(function(item){
-            var type = item.type;
-            switch(type){
-                case 1:
-                    self.children.push( new TestComponent(item,{
-                        resourcePath:self.options.resourcePath,
-                        selfPath:self.options.selfPath,
-                        parent:self,
-                    })/*props*/)
-                    break;
-                case 2:
-                    self.children.push( new TestModule(item,{
-                        resourcePath:self.options.resourcePath,
-                        selfPath:self.options.selfPath,
-                        parent:self,
-                    }/*options*/,this.props/*props*/))
-                    break;
-                case 3:
-                    self.children.push( new TestContent(item,{
-                        ref:self.ref,
-                        parent:self,
-                    }/*options*/))
-                    break;
-                default:
-                    wranError('generate TestModule instalce fail: child type is Unknown type:'+type)
-            }
-        })
-      //end
+    init(){
+        //generate html AST
+        this.patchElementASTAndRef()
+        //create child
+        this.createChildren()
     }
 
 

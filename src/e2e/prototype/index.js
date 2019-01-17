@@ -17,7 +17,7 @@ class TestPrototype {
     //全局混合当前class方法
     $mixin(provider) {
         var { isObject,isEmptyObject,wranError}  = this.$tool
-        if (!provider || tool.isObject(provider) || isEmptyObject(provider)) {
+        if (!provider || !isObject(provider) || isEmptyObject(provider)) {
             wranError('$mixin receive params not right')
         }
         for (var key in provider) {

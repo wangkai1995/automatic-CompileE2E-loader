@@ -23,11 +23,10 @@ var parseText = function(text){
         })
         text = JSON.parse(checkText)
     }
-
     while( (expMatch = expReg.exec(text)) ){
         //如果表达式之前有内容
         if(expMatch.index > lastIndex){
-            tokenExp.push('"'+text.slice(0,expMatch.index)+'"${')
+            tokenExp.push(''+text.slice(0,expMatch.index)+'"${')
             text = text.substring(expMatch.index);
         }
         //中间表达式内容
@@ -46,15 +45,15 @@ var parseText = function(text){
             if(expReg.test(text)){
                  continue
             }else{
-               tokenExp.push('"'+text.slice(0,lastIndex)+'"') 
+               tokenExp.push('"'+text.slice(0,lastIndex)+'') 
             }
         }
     }
     if(lastIndex<text.length){
-        tokenExp.push('}'+text.slice(lastIndex,text.length)+'"')
+        tokenExp.push('}"'+text.slice(lastIndex,text.length)+'')
     }
 
-    return tokenExp.join('').replace(/[\s\r\t\n\b]/g,'');
+    return tokenExp.join('').replace(/[\r\t\n\b]/g,'');
 }
 
 

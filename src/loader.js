@@ -7,11 +7,12 @@ var loaderUtils = require("loader-utils");
 var templateParse = require('./template/index.js')
 var { TestComponent } = require('./e2e/index.js')
 
-
+//文件创建标识
+var fileCreateFlag = false;
 
 
 module.exports = function(content,props) {
-	debugger;
+	// debugger;
 	var outResult = '';
 	var options = loaderUtils.getOptions(this) || {};
 	var resourcePath = this.resourcePath.replace(/\\/g,"/");
@@ -22,17 +23,23 @@ module.exports = function(content,props) {
 	if(/module\.exports\s?=/.test(content)) {
 		content = content.replace(/module\.exports\s?=\s?/, '');
 	}else content = JSON.stringify(content);
-
 	//解析E2E ast语法树
 	var AST = templateParse(content,{
 		e2eParse:true
 	})
-	console.log(AST)
 	// 生成实例对象
 	var instance = new TestComponent(AST,options)
+	//test create test.file
+	var fileContent = instance.render()
 
+	//writeFile
+	if(!fileCreateFlag){
+		fs.writeFileSync(path.resolve(options.output,'index.test.js'), fileContent);
+		fileCreateFlag = true
+	}else{
+		fs.writeFileSync(path.resolve(options.output,'index.test.js'),fileContent,{ 'flag': 'a' });
+	}
 
-	debugger;
 	return outResult
 };
 
