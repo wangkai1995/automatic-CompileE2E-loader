@@ -2,13 +2,13 @@
 
 var TestPrototype = require('../prototype/index.js')
 
-var processAttrs = require('../tool/processAttrs.js')
-
-
 
 var createServer = require('./create.js')
 var patchServer = require('./patch.js')
 var renderServer = require('./render.js')
+
+
+var TestComponent = require('../component/index.js')
 
 
 
@@ -21,23 +21,24 @@ class TestModule extends TestPrototype  {
             resourcePath,
             selfPath,
             parent,
+            TestComponent
         } = options;
-        var { isEmptyArray,isExist,wranError,extend } = this.$tool
+        var { extend,isEmptyObject,isExist,wranError,extend } = this.$tool
         //check
         if(!isExist(ast)){
             wranError('generate testmodule instalce fail: ast is not Exist')
         }
-        if(isEmptyArray(ast.attrs)){
-            wranError('generate testmodule instalce fail: ast object attribute is emptyArray')
+        if(isEmptyObject(ast.attrs)){
+            wranError('generate testmodule instalce fail: ast object attribute is emptyObject')
         }
         if(ast.tagName !== "testmodule"){
             wranError('generate testmodule instalce fail: ast tagName !== "testmodule" ')
         }
-        //mixin
         this.$mixin(createServer)
         this.$mixin(patchServer)
         this.$mixin(renderServer)
         //params
+        this.testComponentConstructor = TestComponent
         this.options = options
         this.props = props || false;
         this.type = ast.type
@@ -45,14 +46,12 @@ class TestModule extends TestPrototype  {
         this.parent = parent || false;
         this.$ast = ast;
         //node attribute
-        this.children = []
-        this.attrs = {}
+        this.attrs = extend({},ast.attrs)
         this.ref = extend({},this.props.ref)
-        processAttrs(this.attrs,ast.attrs)
+        this.children = []
         //init
         this.init()
-        // console.log(this)
-        // debugger;
+        debugger;
     }
 
 
@@ -60,7 +59,10 @@ class TestModule extends TestPrototype  {
         //generate html AST
         this.patchElementASTAndRef()
         //create child
-        this.createChildren()
+        this.createChildren({
+            TestComponent:this.testComponentConstructor,
+            TestModule:TestModule
+        })
     }
 
 

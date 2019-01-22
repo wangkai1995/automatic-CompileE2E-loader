@@ -2,7 +2,8 @@
 
 var TestPrototype = require('../prototype/index.js')
 
-var processAttrs = require('../tool/processAttrs.js')
+var templateParse = require('../../template/index.js')
+
 
 var createServer = require('./create.js')
 var patchServer = require('./patch.js')
@@ -13,25 +14,36 @@ var renderServer = require('./render.js')
 
 class TestComponent extends TestPrototype  {
     //生成
-    constructor(ast,options,props){
+    constructor(content,options,props){
         super()
         var {
             resourcePath,
             selfPath,
             parent,
         } = options;
-        var { isEmptyArray,isExist,wranError } = this.$tool
-        //check
-        if(!isExist(ast)){
-            wranError('generate TestComponent instalce fail: ast is not Exist')
+        var { extend,isEmptyArray,isEmptyObject,isExist,isString,wranError } = this.$tool
+        //check  params
+        if(!isExist(content)){
+            wranError('generate TestComponent instalce fail: content is not Exist')
         }
-        if(isEmptyArray(ast.attrs)){
+        //如果传入的是字符串那么尝试解析E2E ast语法树
+        if(isString(content)){
+            var ast = templateParse(content,{
+                e2eParse:true
+            })
+        }else{
+            var ast = content;
+        }
+        //validate
+        if(isEmptyObject(ast)){
+            wranError('generate TestComponent instalce fail: ast is emptyObject or undefined')
+        }
+        if(isEmptyObject(ast.attrs)){
             wranError('generate TestComponent instalce fail: ast object attribute is emptyArray')
         }
         if(ast.tagName !== "testcomponent"){
             wranError('generate TestComponent instalce fail: ast tagName !== "testcomponent" ')
         }
-        //mixin
         this.$mixin(createServer)
         this.$mixin(patchServer)
         this.$mixin(renderServer)
@@ -43,14 +55,13 @@ class TestComponent extends TestPrototype  {
         this.parent = parent || false;
         this.$ast = ast;
         //node attribute
+        this.attrs = extend({},ast.attrs)
         this.children = []
-        this.attrs = {}
         this.data = {}
         this.ref = {}
-        processAttrs(this.attrs,ast.attrs)
         //init
         this.init();
-        console.log(this)
+        debugger;
     } 
 
 
@@ -62,7 +73,9 @@ class TestComponent extends TestPrototype  {
         //generate refObj
         this.createRef();
         //generate children
-        this.createChildren();
+        this.createChildren({
+            TestComponent:TestComponent
+        });
     }
 
 

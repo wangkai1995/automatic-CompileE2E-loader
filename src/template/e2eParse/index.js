@@ -24,7 +24,8 @@ var parse = function(template){
 			var element = {
 				type: 1,
 				tagName:tag,
-				attrs:[],
+				attrs:{},
+				props:{},
 				children: [],
 			}
 			//编译处理提取到的attribute

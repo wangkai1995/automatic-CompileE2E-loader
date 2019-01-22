@@ -1,10 +1,9 @@
 
 var TestModule = require('../module/index.js')
 var TestContent = require('../content/index.js')
-var TestComponent = require('./index.js')
+
 
 var generateElementAST = require('../tool/generateElementAST.js')
-var generateRef = require('../tool//generateRef.js')
 var connectElementAST = require('../tool/connectElementAST.js')
 
 
@@ -12,14 +11,14 @@ function createData(){
     var { wranError,extend } = this.$tool
     var initData = {}
     var props = this.props || {}
-    if(this.tagName === 'testcomponent' && this.attrs['initData']){
+    if(this.tagName === 'testcomponent' && props['data']){
         try{
-            initData =  JSON.parse(this.attrs['initData'])
+            initData =  JSON.parse(props['data'])
         }catch(e){
             console.error('generate TestComponent generate error: create refObj init Json.parse error:'+e)
         }
     }
-    this.data = extend(initData,props)
+    this.data = initData
 }
 
 
@@ -55,9 +54,11 @@ function createElementAST(){
 }
 
 
-function createChildren(){
+function createChildren(constructors){
     var self = this;
     var { isEmptyArray,isExist,wranError } = self.$tool
+    //绕过cmd循环加载机制
+    var { TestComponent } = constructors
     var astChildren = self.$ast.children
     if(isEmptyArray(astChildren)){
         return false;
@@ -70,13 +71,13 @@ function createChildren(){
                     resourcePath:self.options.resourcePath,
                     selfPath:self.options.selfPath,
                     parent:self,
-                })/*props*/)
-                break;
+                }/*options*/))
             case 2:
                 self.children.push( new TestModule(item,{
                     resourcePath:self.options.resourcePath,
                     selfPath:self.options.selfPath,
                     parent:self,
+                    TestComponent:TestComponent,
                 }/*options*/,{
                     patchElementAndRef:self.patchElementAndRef.bind(self),
                     ref:self.ref

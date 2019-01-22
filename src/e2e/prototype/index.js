@@ -5,12 +5,14 @@ var tool = require('../../util/tool.js')
 var getDomSign = require('./getDomSign.js')
 
 
+
 class TestPrototype {
 
     constructor(config) {
         //根实例初始化
         //全局实例提供工具
         this.$tool = tool.extend({},tool)
+        this.$constructor = {}
     }
 
 
@@ -29,9 +31,9 @@ class TestPrototype {
         }
     }
 
-
     //获取节点路径
     $getElementPath(elAst){
+        var { isEmptyObject,isExist }  = this.$tool
         var el = elAst;
         var path = []
         var maxError = 5000;
@@ -40,6 +42,14 @@ class TestPrototype {
         while(el && el.parent && step<maxError){
             step++;
             parent = el.parent
+            //check Directive index
+            if(!isEmptyObject(el.e2eDirective) && isExist(el.e2eDirective['index'])){
+                var index = el.e2eDirective['index']
+                path.push(':nth-child('+(index)+')>')
+                el = parent;
+                continue;
+            }
+            //seach index
             var len = parent.children.length
             for(var i=0;i<len; i++){
                 var child = parent.children[i]
@@ -69,7 +79,6 @@ class TestPrototype {
         }
         return path
     }
-
 
 }
 

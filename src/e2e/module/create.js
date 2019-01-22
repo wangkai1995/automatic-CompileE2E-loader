@@ -1,12 +1,15 @@
 
-var TestComponent = require('../component/index.js')
-var TestContent = require('../content/index.js')
-var TestModule = require('./index.js')
 
-function createChildren(){
+var TestContent = require('../content/index.js')
+
+
+function createChildren(constructors){
     var self = this;
     var { isEmptyArray,isExist,wranError } = self.$tool
+    //绕过cmd循环加载机制
+    var { TestComponent,TestModule } = constructors
     var astChildren = self.$ast.children
+    //check
     if(isEmptyArray(astChildren)){
         return false;
     }

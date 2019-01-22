@@ -48,7 +48,8 @@ function processId(elm,key,attrMap){
 function processE2eRef(elm,key,attrMap){
     var refReg = /^e2e-(?:[refChild|ref]){1}(?:.*)?$/i
     var refScopeReg = /^e2e-ref(?:-.*)?$/i
-    var refDirectiveReg = /^e2e-(?:[refChild|ref]+){1}-(.+)+$/i
+    var refDirectiveReg = /^e2e-(?:[refChild|ref]+){1}-([a-zA-Z]+)+(?:-)?(\w+)?$/i
+    
     if(!refReg.test(key)){
         return false
     }
@@ -57,7 +58,11 @@ function processE2eRef(elm,key,attrMap){
         elm.e2eScopeFlag = true;
     }
     if(refDirectiveReg.test(key)){
-        elm.e2eDirective = key.match(refDirectiveReg)[1]
+        var directive = key.match(refDirectiveReg)
+        var key = directive[1]
+        var value = directive[2] || false
+        elm.e2eDirective = {}
+        elm.e2eDirective[key] = value;
     }
 }
 
@@ -69,10 +74,7 @@ function processE2eRef(elm,key,attrMap){
 //处理剩余attr
 function processSurplus(elm,attrMap){
     for(var key in attrMap){
-        var attr = {};
-        attr.name = key;
-        attr.value = getAttributeMap(attrMap,key)
-        elm.attrs.push(attr);
+        elm.attrs[key] = getAttributeMap(attrMap,key);
     }
 }
 

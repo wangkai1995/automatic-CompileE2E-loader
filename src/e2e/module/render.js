@@ -1,8 +1,8 @@
 
 
-function render(instance,data){
+function render(instance){
     var self = this;
-    var outResult = `(function(${instance?instance:'client'},data){ \n`
+    var outResult = `(function(${instance?instance:'client'},data,props){ \n`
     //return promise
     outResult += `\treturn new Promise(function(res,rej){ \n`
     //render children content
@@ -15,7 +15,7 @@ function render(instance,data){
     //promise end
     outResult += `\t\}) \n`
     //exe end
-    outResult += `\t})(${instance?instance:'client'},data),\n` 
+    outResult += `\t})(${instance?instance:'client'},data,${this.props?JSON.stringify(this.props):'false'}),\n` 
     return outResult
 }
 

@@ -23,14 +23,13 @@ module.exports = function(content,props) {
 	if(/module\.exports\s?=/.test(content)) {
 		content = content.replace(/module\.exports\s?=\s?/, '');
 	}else content = JSON.stringify(content);
-	//解析E2E ast语法树
-	var AST = templateParse(content,{
-		e2eParse:true
-	})
+
+	
 	// 生成实例对象
-	var instance = new TestComponent(AST,options)
+	var instance = new TestComponent(content,options)
 	//test create test.file
-	var fileContent = instance.render()
+	var fileContent = instance.renderExport()
+
 
 	//writeFile
 	if(!fileCreateFlag){
@@ -39,8 +38,8 @@ module.exports = function(content,props) {
 	}else{
 		fs.writeFileSync(path.resolve(options.output,'index.test.js'),fileContent,{ 'flag': 'a' });
 	}
-
-	return outResult
+	//return false;
+	return fileContent
 };
 
 

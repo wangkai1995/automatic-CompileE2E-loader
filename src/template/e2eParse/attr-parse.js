@@ -29,11 +29,18 @@ function getAttributeMap(attrMap,attrKey){
 
 //处理剩余attr
 function processSurplus(elm,attrMap){
+    var attrReg = /^\$([a-zA-Z]+)/i
+    var propsReg = /^\:([a-zA-Z]+)/
+
     for(var key in attrMap){
-        var attr = {};
-        attr.name = key;
-        attr.value = getAttributeMap(attrMap,key)
-        elm.attrs.push(attr);
+        if(attrReg.test(key)){
+            elm.attrs[key.match(attrReg)[1]] = getAttributeMap(attrMap,key);
+            continue;
+        }
+        if(propsReg.test(key)){
+            elm.props[key.match(propsReg)[1]] = getAttributeMap(attrMap,key);
+            continue;
+        }
     }
 }
 
@@ -45,9 +52,6 @@ function processSurplus(elm,attrMap){
 module.exports =  function parseAttrs(astElm ,attrs){
     var attrsMap = setAttributeMap(attrs)
     var elm = astElm;
-    for(var i=0; i<attrs.length; i++){
-        var key = attrs[i].name;
-    }
     processSurplus(elm,attrsMap)
 }
 

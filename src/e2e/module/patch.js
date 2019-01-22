@@ -15,6 +15,8 @@ function patchElementASTAndRef(){
     var el = generateElementAST(importPath,{
        resourcePath:resourcePath
     })
+
+
     var newRef = patchElementAndRef(el,this.attrs['refName'])
     if(!newRef ){
         return false;

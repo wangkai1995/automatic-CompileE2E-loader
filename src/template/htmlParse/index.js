@@ -26,7 +26,7 @@ var parse = function(template){
 				type: 1,
 				nodeId: getUniqueID(),
 				tagName:tag,
-				attrs:[],
+				attrs:{},
 				children: [],
 				id:false,
 				className:false,
