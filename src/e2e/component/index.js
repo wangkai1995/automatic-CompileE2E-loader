@@ -24,7 +24,7 @@ class TestComponent extends TestPrototype  {
         var { extend,isEmptyArray,isEmptyObject,isExist,isString,wranError } = this.$tool
         //check  params
         if(!isExist(content)){
-            wranError('generate TestComponent instalce fail: content is not Exist')
+            wranError('generate TestComponent Instance fail: content is not Exist')
         }
         //如果传入的是字符串那么尝试解析E2E ast语法树
         if(isString(content)){
@@ -36,13 +36,13 @@ class TestComponent extends TestPrototype  {
         }
         //validate
         if(isEmptyObject(ast)){
-            wranError('generate TestComponent instalce fail: ast is emptyObject or undefined')
+            wranError('generate TestComponent Instance fail: ast is emptyObject or undefined')
         }
         if(isEmptyObject(ast.attrs)){
-            wranError('generate TestComponent instalce fail: ast object attribute is emptyArray')
+            wranError('generate TestComponent Instance fail: ast object attribute is emptyObject')
         }
         if(ast.tagName !== "testcomponent"){
-            wranError('generate TestComponent instalce fail: ast tagName !== "testcomponent" ')
+            wranError('generate TestComponent Instance fail: ast tagName !== "testcomponent" ')
         }
         this.$mixin(createServer)
         this.$mixin(patchServer)

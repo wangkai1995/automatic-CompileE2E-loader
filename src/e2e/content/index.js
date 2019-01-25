@@ -16,10 +16,10 @@ class TestContent extends TestPrototype  {
         var { isEmptyArray,isExist,wranError,extend } = this.$tool
         //check
         if(!isExist(ast)){
-            wranError('generate testcontent instalce fail: ast is not Exist')
+            wranError('generate testcontent Instance fail: ast is not Exist')
         }
         if(!isExist(ast.exp) && !isExist(ast.text)){
-            wranError('generate testcontent instalce fail: ast.text and ast.exp is not Exist')
+            wranError('generate testcontent Instance fail: ast.text and ast.exp is not Exist')
         }
         //mixin
         this.$mixin(renderServer)

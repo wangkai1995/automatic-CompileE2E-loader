@@ -31,6 +31,7 @@ class TestPrototype {
         }
     }
 
+
     //获取节点路径
     $getElementPath(elAst){
         var { isEmptyObject,isExist }  = this.$tool

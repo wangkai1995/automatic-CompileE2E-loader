@@ -1,6 +1,7 @@
 
 
 var TestContent = require('../content/index.js')
+var TestImport = require('../import/index.js')
 
 
 function createChildren(constructors){
@@ -17,18 +18,21 @@ function createChildren(constructors){
         var type = item.type;
         switch(type){
             case 1:
-                self.children.push( new TestComponent(item,{
+                self.children.push( new TestImport(item,{
                     resourcePath:self.options.resourcePath,
                     selfPath:self.options.selfPath,
                     parent:self,
-                })/*props*/)
+                    TestModule:TestModule,
+                    TestContent:TestContent,
+                    TestComponent:TestComponent,
+                }/*options*/,self.props.data/*props*/))
                 break;
             case 2:
                 self.children.push( new TestModule(item,{
                     resourcePath:self.options.resourcePath,
                     selfPath:self.options.selfPath,
                     parent:self,
-                }/*options*/,this.props/*props*/))
+                }/*options*/,self.props/*props*/))
                 break;
             case 3:
                 self.children.push( new TestContent(item,{

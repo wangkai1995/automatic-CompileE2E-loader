@@ -29,7 +29,7 @@ function getAttributeMap(attrMap,attrKey){
 
 //处理剩余attr
 function processSurplus(elm,attrMap){
-    var attrReg = /^\$([a-zA-Z]+)/i
+    var attrReg = /^([a-zA-Z]+)/i
     var propsReg = /^\:([a-zA-Z]+)/
 
     for(var key in attrMap){

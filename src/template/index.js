@@ -7,13 +7,13 @@ var e2eParse = require('./e2eParse/index.js')
 
 var fristSignReg = /^([\r\n\s\t]+)(?:<((?:[a-zA-Z_][\w\-\.]*\:)?[a-zA-Z_][\w\-\.]*))?/
 var lastSignReg = /(?:(?:(?:[a-zA-Z_][\w\-\.]*\:)?[a-zA-Z_][\w\-\.]*)\/?>)?([\r\n\s\t]+)$/
-
+var JSONparseReg = /^(["'\r\n\s\t]+)+</
 
 
 var templateParse = function(template,options){
 	//修正
 	options = options || {};
-	var template = options.e2eParse?JSON.parse(template):template
+	var template = !JSONparseReg.test(template)?JSON.parse(template):template
 	var firstSign = false;
 	var lastSign = false
 	//去除标签开头符号

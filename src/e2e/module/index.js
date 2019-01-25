@@ -26,13 +26,13 @@ class TestModule extends TestPrototype  {
         var { extend,isEmptyObject,isExist,wranError,extend } = this.$tool
         //check
         if(!isExist(ast)){
-            wranError('generate testmodule instalce fail: ast is not Exist')
+            wranError('generate testmodule Instance fail: ast is not Exist')
         }
         if(isEmptyObject(ast.attrs)){
-            wranError('generate testmodule instalce fail: ast object attribute is emptyObject')
+            wranError('generate testmodule Instance fail: ast object attribute is emptyObject')
         }
         if(ast.tagName !== "testmodule"){
-            wranError('generate testmodule instalce fail: ast tagName !== "testmodule" ')
+            wranError('generate testmodule Instance fail: ast tagName !== "testmodule" ')
         }
         this.$mixin(createServer)
         this.$mixin(patchServer)
@@ -51,7 +51,6 @@ class TestModule extends TestPrototype  {
         this.children = []
         //init
         this.init()
-        debugger;
     }
 
 

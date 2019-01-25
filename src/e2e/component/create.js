@@ -1,6 +1,7 @@
 
 var TestModule = require('../module/index.js')
 var TestContent = require('../content/index.js')
+var TestImport = require('../import/index.js')
 
 
 var generateElementAST = require('../tool/generateElementAST.js')
@@ -10,7 +11,7 @@ var connectElementAST = require('../tool/connectElementAST.js')
 function createData(){
     var { wranError,extend } = this.$tool
     var initData = {}
-    var props = this.props || {}
+    var props = this.$ast.props || {}
     if(this.tagName === 'testcomponent' && props['data']){
         try{
             initData =  JSON.parse(props['data'])
@@ -40,6 +41,7 @@ function createRef(){
 }
 
 
+
 function createElementAST(){
     var { resourcePath } = this.options
     var { wranError } = this.$tool
@@ -52,6 +54,7 @@ function createElementAST(){
        wranError('generate TestComponent instalce fail: html template parse Ast fail import:'+importPath)
     } 
 }
+
 
 
 function createChildren(constructors){
@@ -67,11 +70,14 @@ function createChildren(constructors){
         var type = item.type;
         switch(type){
             case 1:
-                self.children.push( new TestComponent(item,{
+                self.children.push( new TestImport(item,{
                     resourcePath:self.options.resourcePath,
                     selfPath:self.options.selfPath,
                     parent:self,
-                }/*options*/))
+                    TestModule:TestModule,
+                    TestContent:TestContent,
+                    TestComponent:TestComponent,
+                }/*options*/,self.data/*props*/))
             case 2:
                 self.children.push( new TestModule(item,{
                     resourcePath:self.options.resourcePath,
@@ -80,7 +86,8 @@ function createChildren(constructors){
                     TestComponent:TestComponent,
                 }/*options*/,{
                     patchElementAndRef:self.patchElementAndRef.bind(self),
-                    ref:self.ref
+                    ref:self.ref,
+                    data:self.data,
                 }/*props*/))
                 break;
             case 3:

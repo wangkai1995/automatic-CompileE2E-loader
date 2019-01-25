@@ -22,7 +22,7 @@ var parse = function(template){
 		start: function(tag,attrs,unary){
 			//组件
 			var element = {
-				type: 1,
+				type: 0,
 				tagName:tag,
 				attrs:{},
 				props:{},
@@ -31,6 +31,9 @@ var parse = function(template){
 			//编译处理提取到的attribute
 			parseAttrs(element,attrs)
 			//修改节点类型
+			if(element.tagName === 'testimport'){
+				element.type = 1;
+			}
 			if(element.tagName === 'testmodule'){
 				element.type = 2;
 			}
