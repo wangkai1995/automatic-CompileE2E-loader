@@ -17,23 +17,6 @@ function createChildren(constructors){
     astChildren.forEach(function(item){
         var type = item.type;
         switch(type){
-            case 1:
-                self.children.push( new TestImport(item,{
-                    resourcePath:self.options.resourcePath,
-                    selfPath:self.options.selfPath,
-                    parent:self,
-                    TestModule:TestModule,
-                    TestContent:TestContent,
-                    TestComponent:TestComponent,
-                }/*options*/,self.props.data/*props*/))
-                break;
-            case 2:
-                self.children.push( new TestModule(item,{
-                    resourcePath:self.options.resourcePath,
-                    selfPath:self.options.selfPath,
-                    parent:self,
-                }/*options*/,self.props/*props*/))
-                break;
             case 3:
                 self.children.push( new TestContent(item,{
                     ref:self.ref,

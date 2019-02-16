@@ -14,7 +14,9 @@ function createData(){
     var props = this.$ast.props || {}
     if(this.tagName === 'testcomponent' && props['data']){
         try{
-            initData =  JSON.parse(props['data'])
+            var data = props['data'];
+            data = data.replace(/'/g,'"')
+            initData =  JSON.parse(data)
         }catch(e){
             console.error('generate TestComponent generate error: create refObj init Json.parse error:'+e)
         }
@@ -78,6 +80,7 @@ function createChildren(constructors){
                     TestContent:TestContent,
                     TestComponent:TestComponent,
                 }/*options*/,self.data/*props*/))
+                break;
             case 2:
                 self.children.push( new TestModule(item,{
                     resourcePath:self.options.resourcePath,

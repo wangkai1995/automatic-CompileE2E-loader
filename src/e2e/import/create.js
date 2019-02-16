@@ -10,7 +10,7 @@ function createInstance(){
     //处理props
     var props = false
     var elProps = ast.props
-    if(!isEmptyObject(elProps) && !isEmptyObject(this.props)){
+    if(!isEmptyObject(elProps)){
         props = this.patchProps(elProps,this.props)
     }
 

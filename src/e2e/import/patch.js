@@ -5,7 +5,8 @@
 
 var patchProps = function(astProps,paramProps){
     var booleanReg = /(?:[\s\t\r\n]*)?(true|false)(?:[\s\t\r\n]*)?/i;
-    var { isExist ,isNumber } = this.$tool 
+    var stringReg = /(?:[\s\t\r\n]*)?(?:'|")+(.+)+(?:'|")+(?:[\s\t\r\n]*)?/i;
+    var { isExist ,isNumber,isString } = this.$tool 
     var props = {}
     for(var key in astProps){
         var value = astProps[key]
@@ -22,6 +23,11 @@ var patchProps = function(astProps,paramProps){
         //check number
         if(!isNaN(parseFloat(value)) && isNumber(parseFloat(value))){
             props[key] = new Number(value)
+            continue;
+        }
+        //string
+        if(stringReg.test(value)){
+            props[key] = value.replace(stringReg,'$1')
             continue;
         }
         // empty 

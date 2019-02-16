@@ -14,15 +14,21 @@ function renderExport(){
     //render children content
     self.children.forEach(function(item){
         switch(item.type){
+            case 1:
+                //testImport
+                outResult += `\t/*${item.tagName} -${item.attrs['importComponent']}*/\n`
+                outResult +=  `\t${item.render()}\n`
+                break;
             case 2:
-                //label
+                //testModule
                 outResult += `\t/* ${item.tagName} - ${item.attrs['refName']} */\n`
                 outResult +=  `\t${item.render(instance)}\n`
                 break;
             case 3:
-                outResult += `\t\t(function(${instance?instance:'client'},data){ \n`
-                outResult +=  `\t\t/* testContent */\n`
-                outResult +=  `\t\t${item.render()} \n`
+                //testContent
+                outResult +=  `\t/* testContent */\n`
+                outResult += `\t(function(${instance?instance:'client'},data){ \n`
+                outResult +=  `\t${item.render()} \n`
                 outResult += `\t})(${instance?instance:'client'},data), \n` 
                 break;
         }
@@ -49,23 +55,29 @@ function render(){
     //render children content
     self.children.forEach(function(item){
         switch(item.type){
+            case 1:
+                //testImport
+                outResult += `\t/*${item.tagName} -${item.attrs['importComponent']}*/\n`
+                outResult +=  `\t${item.render()}\n`
+                break;
             case 2:
-                //label
+                //testModule
                 outResult += `\t/* ${item.tagName} - ${item.attrs['refName']} */\n`
                 outResult +=  `\t${item.render(instance)}\n`
                 break;
             case 3:
-                outResult += `\t\t(function(${instance?instance:'client'},data){ \n`
-                outResult +=  `\t\t/* testContent */\n`
-                outResult +=  `\t\t${item.render()} \n`
-                outResult += `\t})(${instance?instance:'client'},data), \n` 
+                //testContent
+                outResult +=  `\t/* testContent */\n`
+                outResult += `\t(function(${instance?instance:'client'},data,props){ \n`
+                outResult +=  `\t${item.render()} \n`
+                outResult += `\t})(${instance?instance:'client'},data,props), \n` 
                 break;
         }
     })
     //promise all end
     outResult += `\t\t])\n`
     //render end
-    outResult += `\t)(${instance?instance:'client'},data,${this.props?JSON.stringify(this.props):'false'}),\n`
+    outResult += `\t})(${instance?instance:'client'},data,${this.props?JSON.stringify(this.props):'false'}),\n`
     return outResult
 }
 
