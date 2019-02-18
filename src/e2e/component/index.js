@@ -61,7 +61,7 @@ class TestComponent extends TestPrototype  {
         this.ref = {}
         //init
         this.init();
-        debugger;
+        // debugger;
     } 
 
 

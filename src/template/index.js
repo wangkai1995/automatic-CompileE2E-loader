@@ -13,7 +13,7 @@ var JSONparseReg = /^(["'\r\n\s\t]+)+</
 var templateParse = function(template,options){
 	//修正
 	options = options || {};
-	var template = !JSONparseReg.test(template)?JSON.parse(template):template
+	var template = (!JSONparseReg.test(template)&&template.charAt(0) !== '<')?JSON.parse(template):template
 	var firstSign = false;
 	var lastSign = false
 	//去除标签开头符号

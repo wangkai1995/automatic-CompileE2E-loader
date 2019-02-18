@@ -6,6 +6,7 @@ var path = require('path');
 function createInstance(){
     var { extend,isEmptyObject } = this.$tool
     var { TestModule,TestContent,TestComponent,resourcePath,selfPath } =  this.options
+    var { $patchRefAddPrefix,$patchRecursionUpdateRef } = this
     var ast = this.$ast
     //处理props
     var props = false
@@ -26,8 +27,17 @@ function createInstance(){
         resourcePath:filePath,
         selfPath:selfPath,
         parent:this.parent,
-    }/*options*/,props/*props*/)
+    }/*options*/,props/*props*/);
+    
+    /*  patch update instance ref  */
+    var refName = this.attrs['refName']
+    if( refName && this.parent.ref ){
+        var prefix = this.parent.ref[refName]
+        var newRef = $patchRefAddPrefix(prefix,this.instance.ref)
+        $patchRecursionUpdateRef(this.instance,newRef)
+    }
 
+    
     console.log(this)
     debugger
 }
@@ -37,11 +47,8 @@ function createInstance(){
 
 
 
-
-
-
-
-
 module.exports ={
     createInstance
 }
+
+
